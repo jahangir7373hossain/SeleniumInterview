@@ -2,9 +2,14 @@ package seleniumException;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -88,13 +93,33 @@ public class Amazone {
 		Thread.sleep(5000);
 	}
 	
+	public void verifyLinks(String links) throws Exception {
+		URL url = new URL(links);
+		HttpsURLConnection httpUrlConnections = (HttpsURLConnection)url.openConnection();
+		httpUrlConnections.connect();
+		if(httpUrlConnections.getResponseCode() == 200) {
+			System.out.println("Active links: " + httpUrlConnections + httpUrlConnections.getResponseMessage());
+		}else if(httpUrlConnections.getResponseCode() == httpUrlConnections.HTTP_NOT_FOUND){
+			System.out.println("Broken links: " + httpUrlConnections + httpUrlConnections.getResponseMessage());
+		}
+	}
+	
 	@Test
-	public void hoverSignIn() throws InterruptedException {
+	public void hoverSignIn() throws Exception {
 		WebElement signInElement = driver.findElement(By.xpath("//div[@id = 'nav-tools']//a[contains(@href,'com/ap/signin')]"));
 		Actions act = new Actions(driver);
 		act.moveToElement(signInElement).perform();
 		WebElement signInButton = driver.findElement(By.xpath("(//span[contains(text(), 'Sign in')])[3]"));
-		signInButton.click();
+		signInButton.click();		
+		List<WebElement> linksList = driver.findElements(By.tagName("a"));		
+		for(int i =0; i < linksList.size(); i++) {			
+			String links = linksList.get(i).getAttribute("href");			
+			if ((links != null) && !links.startsWith("javascript")) {			
+			 verifyLinks(links);
+			
+			}
+		}
+		
 		driver.findElement(By.xpath("//a[@id = 'createAccountSubmit']")).click();
 		driver.findElement(By.xpath("//input[@id = 'ap_customer_name']")).sendKeys("John");
 		driver.findElement(By.xpath("//input[@id = 'ap_email']")).sendKeys("Mike345@GMAIL.COM");
