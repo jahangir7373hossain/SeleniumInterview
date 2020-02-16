@@ -1,0 +1,9 @@
+.classpath
+.git/
+.project
+.settings/
+target/
+testng.xml
+testngparameter.xml
+test-output/
+
