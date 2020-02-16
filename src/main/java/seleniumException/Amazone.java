@@ -61,7 +61,6 @@ public class Amazone {
 		List<WebElement> footerList = driver.findElements(By.xpath("//td[@class = 'navFooterDescItem']"));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView()", footerList.get(0));
-		
 		System.out.println("------------------ Footer List-------------------");
 		for(int i = 0; i < footerList.size(); i++) {
 			System.out.println(footerList.get(i).getText());
@@ -85,9 +84,7 @@ public class Amazone {
 	@Test
 	public void searchProduct() throws InterruptedException {
 		driver.findElement(By.xpath("//input[@id = 'twotabsearchtextbox']")).sendKeys("air pod");
-		
 		WebElement serchButton =  driver.findElement(By.xpath("//div[@class = 'nav-search-submit nav-sprite']"));
-		
 		JavascriptExecutor js =  (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", serchButton);
 		Thread.sleep(5000);
@@ -115,11 +112,9 @@ public class Amazone {
 		for(int i =0; i < linksList.size(); i++) {			
 			String links = linksList.get(i).getAttribute("href");			
 			if ((links != null) && !links.startsWith("javascript")) {			
-			 verifyLinks(links);
-			
+			 verifyLinks(links);			
 			}
-		}
-		
+		}		
 		driver.findElement(By.xpath("//a[@id = 'createAccountSubmit']")).click();
 		driver.findElement(By.xpath("//input[@id = 'ap_customer_name']")).sendKeys("John");
 		driver.findElement(By.xpath("//input[@id = 'ap_email']")).sendKeys("Mike345@GMAIL.COM");
